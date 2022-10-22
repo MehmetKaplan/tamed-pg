@@ -9,7 +9,9 @@ yarn add tamed-pg
 ### Usage
 
 ```javascript
-const tp = require('tamed-pg.js');
+const tp = require('tamed-pg');
+
+// Check Test section for DB configuration for the testing
 
 const l_credentials = {
 	"user": "tamedpgusr",
@@ -19,20 +21,23 @@ const l_credentials = {
 	"host": "localhost"
 };
 
-await tp.connect(l_credentials);
-const l_result = await tp.runSQL('SELECT 1 + 1 AS solution', []);
-const l_create_table = await tp.runSQL('CREATE TABLE IF NOT EXISTS TamedPG.test_table (id SERIAL PRIMARY KEY, text VARCHAR(40) not null, complete BOOLEAN)', []);
-const l_insert = await tp.runSQL('INSERT INTO TamedPG.test_table(text, complete) values($1, $2) RETURNING *', ['hello world', false]);
-const l_select = await tp.runSQL('SELECT * FROM TamedPG.test_table WHERE id = $1', [l_insert.rows[0].id]);
-const l_update = await tp.runSQL('UPDATE TamedPG.test_table SET text = $1, complete = $2 WHERE id = $3', ['hello world 2', true, l_insert.rows[0].id]);
-const l_select2 = await tp.runSQL('SELECT * FROM TamedPG.test_table WHERE id = $1', [l_insert.rows[0].id]);
-const l_delete = await tp.runSQL('DELETE FROM TamedPG.test_table WHERE id = $1', [l_insert.rows[0].id]);
-const l_select3 = await tp.runSQL('SELECT * FROM TamedPG.test_table WHERE id = $1', [l_insert.rows[0].id]);
-const l_drop_table = await tp.runSQL('DROP TABLE TamedPG.test_table', []);
+const test = async () => {
+	await tp.connect(l_credentials);
+	const l_result = await tp.runSQL('SELECT 1 + 1 AS solution', []);
+	const l_create_table = await tp.runSQL('CREATE TABLE IF NOT EXISTS TamedPG.test_table (id SERIAL PRIMARY KEY, text VARCHAR(40) not null, complete BOOLEAN)', []);
+	const l_insert = await tp.runSQL('INSERT INTO TamedPG.test_table(text, complete) values($1, $2) RETURNING *', ['hello world', false]);
+	const l_select = await tp.runSQL('SELECT * FROM TamedPG.test_table WHERE id = $1', [l_insert.rows[0].id]);
+	const l_update = await tp.runSQL('UPDATE TamedPG.test_table SET text = $1, complete = $2 WHERE id = $3', ['hello world 2', true, l_insert.rows[0].id]);
+	const l_select2 = await tp.runSQL('SELECT * FROM TamedPG.test_table WHERE id = $1', [l_insert.rows[0].id]);
+	const l_delete = await tp.runSQL('DELETE FROM TamedPG.test_table WHERE id = $1', [l_insert.rows[0].id]);
+	const l_select3 = await tp.runSQL('SELECT * FROM TamedPG.test_table WHERE id = $1', [l_insert.rows[0].id]);
+	const l_drop_table = await tp.runSQL('DROP TABLE TamedPG.test_table', []);
+}
 
+test();
 ```
 
-### Test with Jest
+### Test
 
 The jest tests assume a DB is prepared already with following commands.
 
