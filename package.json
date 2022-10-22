@@ -1,7 +1,7 @@
 {
 	"name": "tamed-pg",
 	"description": "A postgresql connection linbrary that uses `pg` under the hood and aims to ease the pg usage.",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"private": false,
 	"author": "MehmetKaplan",
 	"license": "MIT",
