@@ -61,7 +61,7 @@ EOF
 3. Add following line to `/etc/postgresql/[VERSION]/main/pg_hba.conf` in the local area **before the peer row in order to take precedence**.
 
 ```
-local   all             tamedpgusr                              password
+local   all             tamedpgusr                              scram-sha-256
 ```
 
 4. Restart the service.
