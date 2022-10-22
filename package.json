@@ -1,0 +1,29 @@
+{
+	"name": "tamed-pg",
+	"description": "A postgresql connection linbrary that uses `pg` under the hood and aims to ease the pg usage.",
+	"version": "1.0.0",
+	"private": false,
+	"author": "MehmetKaplan",
+	"license": "MIT",
+	"repository": "MehmetKaplan/tamed-pg",
+	"main": "tamed-pg.js",
+	"scripts": {
+		"test": "jest --runInBand --coverage --no-cache --forceExit "
+	},
+	"peerDependencies": {},
+	"dependencies": {
+		"pg": "^8.8.0",
+		"tick-log": "^1.1.2"
+	},
+	"devDependencies": {
+		"jest": "^29.2.1"
+	},
+	"keywords": [
+		"PostgreSQL",
+		"node",
+		"javascript",
+		"pool",
+		"SQL",
+		"easy"
+	]
+}
