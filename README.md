@@ -51,7 +51,7 @@ sudo -u postgres createdb TamedPGDB
 
 ```bash
 sudo -u postgres psql << EOF
-	create user tamedpgusr password 'easypassword';
+	create user tamedpgusr encrypted password 'easypassword';
 	grant all on database "TamedPGDB" to tamedpgusr;
 	\c TamedPGDB;
 	create schema TamedPG authorization tamedpgusr;
