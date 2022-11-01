@@ -16,22 +16,22 @@ const tp = require('tamed-pg');
 const l_credentials = {
 	"user": "tamedpgusr",
 	"password": "easypassword",
-	"database": "TamedPGDB",
+	"database": "tamedpgdb",
 	"port": 5432,
 	"host": "localhost"
 };
 
 const test = async () => {
 	await tp.connect(l_credentials);
-	const l_result = await tp.runSQL('SELECT 1 + 1 AS solution', []);
-	const l_create_table = await tp.runSQL('CREATE TABLE IF NOT EXISTS TamedPG.test_table (id SERIAL PRIMARY KEY, text VARCHAR(40) not null, complete BOOLEAN)', []);
-	const l_insert = await tp.runSQL('INSERT INTO TamedPG.test_table(text, complete) values($1, $2) RETURNING *', ['hello world', false]);
-	const l_select = await tp.runSQL('SELECT * FROM TamedPG.test_table WHERE id = $1', [l_insert.rows[0].id]);
-	const l_update = await tp.runSQL('UPDATE TamedPG.test_table SET text = $1, complete = $2 WHERE id = $3', ['hello world 2', true, l_insert.rows[0].id]);
-	const l_select2 = await tp.runSQL('SELECT * FROM TamedPG.test_table WHERE id = $1', [l_insert.rows[0].id]);
-	const l_delete = await tp.runSQL('DELETE FROM TamedPG.test_table WHERE id = $1', [l_insert.rows[0].id]);
-	const l_select3 = await tp.runSQL('SELECT * FROM TamedPG.test_table WHERE id = $1', [l_insert.rows[0].id]);
-	const l_drop_table = await tp.runSQL('DROP TABLE TamedPG.test_table', []);
+	const l_result = await tp.runSQL('select 1 + 1 as solution', []);
+	const l_create_table = await tp.runSQL('create table if not exists tamedpg.test_table (id serial primary key, text varchar(40) not null, complete boolean)', []);
+	const l_insert = await tp.runSQL('insert into tamedpg.test_table(text, complete) values($1, $2) returning *', ['hello world', false]);
+	const l_select = await tp.runSQL('select * from tamedpg.test_table where id = $1', [l_insert.rows[0].id]);
+	const l_update = await tp.runSQL('update tamedpg.test_table set text = $1, complete = $2 where id = $3', ['hello world 2', true, l_insert.rows[0].id]);
+	const l_select2 = await tp.runSQL('select * from tamedpg.test_table where id = $1', [l_insert.rows[0].id]);
+	const l_delete = await tp.runSQL('delete from tamedpg.test_table where id = $1', [l_insert.rows[0].id]);
+	const l_select3 = await tp.runSQL('select * from tamedpg.test_table where id = $1', [l_insert.rows[0].id]);
+	const l_drop_table = await tp.runSQL('drop table tamedpg.test_table', []);
 }
 
 test();
@@ -44,7 +44,7 @@ The jest tests assume a DB is prepared already with following commands.
 1. Generate a DB for the test.
 
 ```bash
-sudo -u postgres createdb TamedPGDB
+sudo -u postgres createdb tamedpgdb
 ```
 
 2. Generate the user with **small letters**:
@@ -52,9 +52,9 @@ sudo -u postgres createdb TamedPGDB
 ```bash
 sudo -u postgres psql << EOF
 	create user tamedpgusr encrypted password 'easypassword';
-	grant all on database "TamedPGDB" to tamedpgusr;
-	\c TamedPGDB;
-	create schema TamedPG authorization tamedpgusr;
+	grant all on database "tamedpgdb" to tamedpgusr;
+	\c tamedpgdb;
+	create schema tamedpg authorization tamedpgusr;
 EOF
 ```
 
@@ -80,9 +80,9 @@ yarn test
 
 ```bash
 sudo -u postgres psql << EOF
-	\c TamedPGDB;
-	drop schema TamedPG;
-	revoke all on database "TamedPGDB" from tamedpgusr;
+	\c tamedpgdb;
+	drop schema tamedpg;
+	revoke all on database "tamedpgdb" from tamedpgusr;
 	drop user tamedpgusr;
 EOF
 ```
