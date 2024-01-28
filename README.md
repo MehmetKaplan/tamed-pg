@@ -13,25 +13,26 @@ const tp = require('tamed-pg');
 
 // Check Test section for DB configuration for the testing
 
-const l_credentials = {
-	"user": "tamedpgusr",
-	"password": "easypassword",
-	"database": "tamedpgdb",
-	"port": 5432,
-	"host": "localhost"
-};
+	const l_credentials = {
+		"user": "tamedpgusr",
+		"password": "easypassword",
+		"database": "tamedpgdb",
+		"port": 5432,
+		"host": "localhost"
+	};
 
 const test = async () => {
-	await tp.connect(l_credentials);
-	const l_result = await tp.runSQL('select 1 + 1 as solution', []);
-	const l_create_table = await tp.runSQL('create table if not exists tamedpg.test_table (id serial primary key, text varchar(40) not null, complete boolean)', []);
-	const l_insert = await tp.runSQL('insert into tamedpg.test_table(text, complete) values($1, $2) returning *', ['hello world', false]);
-	const l_select = await tp.runSQL('select * from tamedpg.test_table where id = $1', [l_insert.rows[0].id]);
-	const l_update = await tp.runSQL('update tamedpg.test_table set text = $1, complete = $2 where id = $3', ['hello world 2', true, l_insert.rows[0].id]);
-	const l_select2 = await tp.runSQL('select * from tamedpg.test_table where id = $1', [l_insert.rows[0].id]);
-	const l_delete = await tp.runSQL('delete from tamedpg.test_table where id = $1', [l_insert.rows[0].id]);
-	const l_select3 = await tp.runSQL('select * from tamedpg.test_table where id = $1', [l_insert.rows[0].id]);
-	const l_drop_table = await tp.runSQL('drop table tamedpg.test_table', []);
+	let poolname = await tp.connect(l_credentials);
+	const l_result = await tp.runSQL(poolname, 'select 1 + 1 as solution', [], true);
+	const l_create_table = await tp.runSQL(poolname, 'create table if not exists tamedpg.test_table (id serial primary key, text varchar(40) not null, complete boolean)', [], true);
+	const l_insert = await tp.runSQL(poolname, 'insert into tamedpg.test_table(text, complete) values($1, $2) returning *', ['hello world', false], true);
+	const l_select = await tp.runSQL(poolname, 'select * from tamedpg.test_table where id = $1', [l_insert.rows[0].id], true);
+	const l_update = await tp.runSQL(poolname, 'update TamedPG.test_table SET text = $1, complete = $2 WHERE id = $3', ['hello world 2', true, l_insert.rows[0].id], true);
+	const l_select2 = await tp.runSQL(poolname, 'select * from tamedpg.test_table where id = $1', [l_insert.rows[0].id], true);
+	const l_delete = await tp.runSQL(poolname, 'delete from tamedpg.test_table where id = $1', [l_insert.rows[0].id], true);
+	const l_select3 = await tp.runSQL(poolname, 'select * from tamedpg.test_table where id = $1', [l_insert.rows[0].id], true);
+	const l_drop_table = await tp.runSQL(poolname, 'drop table TamedPG.test_table', [], true);
+	let releaseResult  = await tp.end(poolname);
 }
 
 test();
